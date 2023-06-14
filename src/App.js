@@ -93,7 +93,7 @@ function App() {
                         <Draggable draggableId={id.toString()} key={id.toString()} index={index}>
                         {(provided) => (
                           <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                            <p>{title}</p>
+                            <p> {title}</p>
                             <AiOutlinePlayCircle onClick={() => { handleUpdate(id, 'doing') }} className="icon-2 pointer"></AiOutlinePlayCircle>
                           </li>
                         )}
