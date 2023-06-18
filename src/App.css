@@ -88,11 +88,31 @@ li{
   padding: 15px 10px;
   border-radius: 15px;
   box-shadow: 2px 2px 10px rgb(255 113 113);
+  background-color: white;
+}
+li p{
+  text-overflow: ellipsis;
 }
 .card{
   border-radius: 15px;
   padding: 10px 20px;
   width: 350px;
+}
+.card-body{
+  overflow: auto;
+  height: 400px;
+  scroll-behavior: smooth;
+  padding: 10px;
+}
+.card-body::-webkit-scrollbar {
+  width: 1px; /* Adjust the width of the scrollbar */
+}
+.card-body::-webkit-scrollbar-thumb {
+  background-color: rgb(255 113 113);
+  border-radius: 35px; /* Customize the color of the scrollbar thumb */
+}
+.card-body::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(255 113 113); /* Customize the color of the scrollbar thumb on hover */
 }
 .new-item{
   padding: 10px;
