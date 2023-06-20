@@ -1,15 +1,16 @@
 import './App.css';
-import React, {useState , useRef} from 'react'
+import React, {useState , useRef, useEffect} from 'react'
+import { ProgressBarComponent } from 'react-progress-components';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import {IoCheckmarkDoneCircleSharp} from 'react-icons/io5'
 import {TiTickOutline, TiPlusOutline} from 'react-icons/ti'
-import {AiOutlineFileText, AiOutlineClose, AiOutlineClockCircle, AiOutlineDoubleRight, AiOutlinePlayCircle, AiOutlineRollback} from 'react-icons/ai'
+import {AiOutlineFileText, AiOutlineClose, AiOutlineClockCircle, AiOutlineDoubleRight} from 'react-icons/ai'
+
 function App() {
-  var [date, setDate] =useState(0)
-  var [screen, setScreen] = useState(false)
   const divScreen = useRef(null)
   const inputTitle = useRef(null)
-  
+  const [date, setDate] =useState(0)
+  const [screen, setScreen] = useState(false)
+  const [progress, setProgress] = useState()
   const [tasks, setTasks] = useState([
     { 'id': 1, 'title': 'Food App', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
     { 'id': 2, 'title': '20 Push Ups', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
@@ -18,8 +19,17 @@ function App() {
     { 'id': 5, 'title': 'Etehad Commercial Project', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
     { 'id': 6, 'title': 'IncDec App', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
   ])
-  
-  
+
+  useEffect(()=>{
+    checkProgress()
+  },[tasks])
+
+  const checkProgress = () => {
+    const doneTasks = tasks.filter(task => task.status === 'done')
+    const percentage = (doneTasks.length / tasks.length) * 100
+    setProgress(percentage.toFixed(2))
+  }
+
   const screenHandler = () => {
     var newScreen = !screen
     if(newScreen){
@@ -42,6 +52,7 @@ function App() {
     }
     setTasks([...tasks, task])
     screenHandler()
+    inputTitle.current.value = ''
   }
 
   const handleDragEnd = (result) => {
@@ -51,22 +62,20 @@ function App() {
     else if(destination.droppableId === source.droppableId && destination.index !== source.index)
     {
       const items = Array.from(tasks);
-      const [reorderedItem] = items.splice(source.index, 1);
-      items.splice(destination.index, 0, reorderedItem);
-      setTasks(items);
+      const [reorderedItem] = items.splice(source.index, 1)
+      items.splice(destination.index, 0, reorderedItem)
+      setTasks(items)
     }
     else if(source.droppableId !== destination.droppableId){
       
       const updatedTasks = tasks.map((task) => {
-        if (task.id.toString() === result.draggableId) {
-          return { ...task, status: destination.droppableId };
+        if (task.id.toString() === draggableId) {
+          return { ...task, status: destination.droppableId }
         }
-        return task;
-      });
-    
-      setTasks(updatedTasks);
+        return task
+      })
+      setTasks(updatedTasks)
     }
-
   }
   return (
     <div className="App">
@@ -76,10 +85,21 @@ function App() {
         </div>
         <div className='app-body'>
           <div className='info'>
-            <h1><TiTickOutline /> Task List</h1>
-            <p>Use this template to track your personal tasks.</p>
-            <p>Click <span>+ New</span> to create a new task directly on this  board.</p>
-            <p>Click an existing task to add additional context or subtasks.</p>
+            <div className='info-data'>
+              <h1><TiTickOutline /> Task List</h1>
+              <p>Use this template to track your personal tasks.</p>
+              <p>Click <span>+ New</span> to create a new task directly on this  board.</p>
+              <p>Click an existing task to add additional context or subtasks.</p>
+            </div>
+            <div className='info-progress'>
+              <ProgressBarComponent 
+              type={ 'circle' } 
+              trackColor={ '#fff' } 
+              progressColor={ '#ff7171' } 
+              textFont={ 'Arial' } 
+              size={ 200 } 
+              progress={ progress } />
+            </div>
           </div>
           <div className='navbar'>
             <div className='left'><AiOutlineFileText className='icon'/><h2> Board View </h2></div>
@@ -101,7 +121,7 @@ function App() {
                   <ul {...provided.droppableProps} ref={provided.innerRef}>
                   {tasks
                   .filter((task) => task.status === 'todo')
-                  .map(({id, title, status}, index) => (
+                  .map(({id, title}, index) => (
                     
                     <Draggable draggableId={id.toString()} key={id.toString()} index={index}>
                     {(provided) => (

@@ -18,6 +18,8 @@
   padding: 10px 20px;
   background-color: #ffefef;
   border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 .info p span{
   background-color: #98ff98;
