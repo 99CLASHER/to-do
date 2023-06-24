@@ -6,19 +6,23 @@
 .app-content{
   position: relative;
   overflow: hidden;
-  height: 100vh;
 }
 .app-header h2{
   font-weight: 400;
 }
 .app-body{
-  margin-left: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .info{
+  width: 90%;
   padding: 10px 20px;
   background-color: #ffefef;
   border-radius: 30px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 .info p span{
@@ -27,9 +31,9 @@
   border-radius: 6px;
 }
 .navbar{
+  width: 90%;
   display: flex;
   justify-content: space-between;
-  padding-right: 25px;
 }
 .btn{
   margin-top: 15px;
@@ -47,7 +51,10 @@
 }
 .content{
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
+  background-color: #ffefef;
+  border-radius: 30px;
 }
 li{
   list-style: none;
@@ -158,21 +165,21 @@ li p{
   transition: transform 0.3s ease-in-out;
 }
 .slide-up {
-  transform: translateY(37%);
+  transform: translateY(0%);
+  padding-left: 4px;
+  border-radius: 35px;
 }
 
 .screen-header{
   display: flex;
   justify-content: space-between;
-  padding: 10px 50px;
 }
-.screen-body{
-  padding: 10px 50px;
-}
+
 .title-input{
-  font-size: 45px;
+  font-size: 35px;
   border: none;
   outline: none;
+  width: 100%;
 }
 .data{
   width: 350px;

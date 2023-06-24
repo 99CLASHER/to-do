@@ -1,9 +1,15 @@
 import './App.css';
+import Info from './components/Info'
+import { motion } from "framer-motion"
+import AddTask from './components/AddTask';
+import {TiTickOutline } from 'react-icons/ti'
+import {fadeIn} from './components/variants'
+import {AiOutlineFileText } from 'react-icons/ai'
+import TodoCard from './components/Cards/TodoCard';
+import DoneCard from './components/Cards/DoneCard';
+import DoingCard from './components/Cards/DoingCard';
+import { DragDropContext } from 'react-beautiful-dnd';
 import React, {useState , useRef, useEffect} from 'react'
-import { ProgressBarComponent } from 'react-progress-components';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import {TiTickOutline, TiPlusOutline} from 'react-icons/ti'
-import {AiOutlineFileText, AiOutlineClose, AiOutlineClockCircle, AiOutlineDoubleRight} from 'react-icons/ai'
 
 function App() {
   const divScreen = useRef(null)
@@ -14,9 +20,9 @@ function App() {
   const [tasks, setTasks] = useState([
     { 'id': 1, 'title': 'Food App', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
     { 'id': 2, 'title': '20 Push Ups', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
-    { 'id': 3, 'title': 'ReactJs Course', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
+    { 'id': 3, 'title': 'ReactJs Course', 'date': 'Tue Jun 13 2023', 'status': 'doing' },
     { 'id': 4, 'title': 'Fyp Complition', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
-    { 'id': 5, 'title': 'Etehad Commercial Project', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
+    { 'id': 5, 'title': 'Etehad Commercial Project', 'date': 'Tue Jun 13 2023', 'status': 'done' },
     { 'id': 6, 'title': 'IncDec App', 'date': 'Tue Jun 13 2023', 'status': 'todo' },
   ])
 
@@ -77,139 +83,60 @@ function App() {
       setTasks(updatedTasks)
     }
   }
+
   return (
     <div className="App">
       <div className='app-content'>
-        <div className='app-header'>
+        <motion.div
+        variants={fadeIn('right', 0.3)}
+        initial='hidden'
+        whileInView={"show"}
+        viewport={{once: false, amount: 0.3}}
+        className='app-header'>
           <h2><TiTickOutline /> Task List</h2>
-        </div>
+        </motion.div>
         <div className='app-body'>
-          <div className='info'>
-            <div className='info-data'>
-              <h1><TiTickOutline /> Task List</h1>
-              <p>Use this template to track your personal tasks.</p>
-              <p>Click <span>+ New</span> to create a new task directly on this  board.</p>
-              <p>Click an existing task to add additional context or subtasks.</p>
-            </div>
-            <div className='info-progress'>
-              <ProgressBarComponent 
-              type={ 'circle' } 
-              trackColor={ '#fff' } 
-              progressColor={ '#ff7171' } 
-              textFont={ 'Arial' } 
-              size={ 200 } 
-              progress={ progress } />
-            </div>
-          </div>
-          <div className='navbar'>
+          <Info progress={progress}/>
+          <motion.div 
+          variants={fadeIn('right', 1.5)}
+          initial='hidden'
+          whileInView={"show"}
+          viewport={{once: false, amount: 0.3}}
+          className='navbar'>
             <div className='left'><AiOutlineFileText className='icon'/><h2> Board View </h2></div>
             <div className='right'><button onClick={screenHandler} className='btn'>New</button></div>
-          </div>
-          <div className='content'>
+          </motion.div>
+          <motion.div 
+          variants={fadeIn('right', 2)}
+          initial='hidden'
+          whileInView={"show"}
+          viewport={{once: false, amount: 0.3}}
+          className='content'>
           <DragDropContext onDragEnd={handleDragEnd}>
-            <div className='card'>
-              <div className='card-header'>
-                <div>
-                  <h3 className='to-do'>To Do</h3>
-                  <span>2</span>
-                </div>
-                <TiPlusOutline className='icon-2 pointer' onClick={screenHandler} />
-              </div>
-              <div className='card-body'>
-                <Droppable droppableId='todo'>
-                  {(provided)=>(
-                  <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks
-                  .filter((task) => task.status === 'todo')
-                  .map(({id, title}, index) => (
-                    
-                    <Draggable draggableId={id.toString()} key={id.toString()} index={index}>
-                    {(provided) => (
-                      <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <p> {title}</p>
-                      </li>
-                    )}
-                    </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </ul>
-                  )}
-                </Droppable>
-              </div>
-              <div className='new-item' onClick={screenHandler}>NEW +</div>
-            </div>
-            <div className='card'>
-              <div className='card-header'>
-                <div>
-                  <h3 className='doing'>Doing</h3>
-                  <span>2</span>
-                </div>
-              </div>
-              <div className='card-body'>  
-                <Droppable droppableId='doing'>
-                    {(provided)=>(
-                    <ul {...provided.droppableProps} ref={provided.innerRef}>
-                    {tasks
-                      .filter((task) => task.status === 'doing')
-                      .map(({id, title, status}, index) => (
-                      <Draggable draggableId={id.toString()} key={id.toString()} index={index}>
-                      {(provided) => (
-                        <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                          <p> {title}</p>
-                        </li>
-                      )}
-                      </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </ul>
-                    )}
-                  </Droppable>
-              </div>
-            </div>
-            <div className='card'>
-              <div className='card-header'>
-                <div>
-                  <h3 className='done'>Done</h3>
-                  <span>2</span>
-                </div>
-              </div>
-              <div className='card-body'>  
-                <Droppable droppableId='done'>
-                  {(provided)=>(
-                  <ul {...provided.droppableProps} ref={provided.innerRef}>
-                  {tasks
-                    .filter((task) => task.status === 'done')
-                    .map(({id, title, status}, index) => (
-                    <Draggable draggableId={id.toString()} key={id.toString()} index={index}>
-                    {(provided) => (
-                      <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <p> {title}</p>
-                      </li>
-                    )}
-                    </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </ul>
-                  )}
-                </Droppable>
-              </div>
-            </div>
+            <TodoCard 
+            screen={screenHandler}
+            tasks={tasks.filter((task) => task.status === 'todo')}
+            taskLength={tasks.filter(task => task.status === 'todo').length} 
+            />
+            <DoingCard 
+            tasks={tasks.filter((task) => task.status === 'doing')}
+            todoLength={tasks.filter(task => task.status === 'doing').length} 
+            />
+            <DoneCard 
+            tasks={tasks.filter((task) => task.status === 'done')}
+            todoLength={tasks.filter(task => task.status === 'done').length} 
+            />
           </DragDropContext>
-          </div>
+          </motion.div>
         </div>
-        <div ref={divScreen} className="screen">
-          <div className='screen-header'>
-            <h2>Add Task</h2>
-            <AiOutlineClose className='icon pointer' onClick={screenHandler}/>
-          </div>
-          <div className='screen-body'>
-            <form>
-              <input className='title-input' ref={inputTitle} placeholder='Write Your Title Here' /> <button type='button' className='btn' onClick={addTask}>Add</button>
-              <div className='data'><p><AiOutlineClockCircle className='icon-3'/> Date</p>  <p>{date}</p></div>
-              <div className='data'><p><AiOutlineDoubleRight className='icon-3'/> Status</p>  <p>To do</p></div>
-            </form>
-          </div>
-        </div>
+        <AddTask 
+        divScreen={divScreen}
+        screen={screenHandler}
+        title={inputTitle}
+        date={date}
+        addTask={addTask}
+        />
+        
       </div>
     </div>
   );
